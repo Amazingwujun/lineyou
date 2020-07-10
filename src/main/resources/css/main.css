@@ -1,0 +1,31 @@
+.label {
+    -fx-font-size: 17;
+    -fx-background-repeat: no-repeat;
+}
+
+#msgView > .label {
+    -fx-padding: 5px;
+    -fx-background-radius: 5px;
+    -fx-background-color: #ff846b;
+    -fx-font-family: 'Microsoft JhengHei';
+    -fx-font-style: 12px
+}
+
+#close {
+    -fx-pref-width: 18;
+    -fx-pref-height: 18;
+    -fx-background-image: url('/img/close.png');
+}
+
+#close:hover {
+    -fx-background-color: #ff4f14;
+}
+
+.jfx-button {
+    -fx-padding: 3px;
+    -jfx-button-type: FLAT;
+    -fx-background-color: #bdbdbd;
+    -fx-text-fill: #273136;
+    -fx-font-size: 15px;
+    -fx-cursor: hand;
+}

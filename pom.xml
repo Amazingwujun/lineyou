@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.jun</groupId>
+    <artifactId>lineyou</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>lineyou</name>
+    <description>im 客户端</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <spring.version>5.2.7.RELEASE</spring.version>
+        <jfoenix.version>8.0.10</jfoenix.version>
+        <netty.version>4.1.50.Final</netty.version>
+        <fxlauncher.version>1.0.20</fxlauncher.version>
+        <fontawesomefx.version>8.9</fontawesomefx.version>
+
+        <!--    fxlauncher properties    -->
+        <!-- Installer Filename without suffix -->
+        <app.filename>lineyou</app.filename>
+
+        <!-- The JavaFX Application class name -->
+        <app.mainClass>no.tornado.FxlDemo</app.mainClass>
+
+        <!-- Optional override to specify where the cached files are stored. Default is current working directory -->
+        <app.cacheDir>USERLIB/FxlDemo</app.cacheDir>
+
+        <!-- Optional parameters to the application, will be embedded in the launcher and can be overriden on the command line -->
+        <app.parameters>--myOption=myValue --myOtherOption=myOtherValue</app.parameters>
+
+        <!-- The Application vendor used by javapackager -->
+        <app.vendor>Acme Inc</app.vendor>
+
+        <!-- The Application version used by javapackager -->
+        <app.version>2.0</app.version>
+
+        <!-- Base URL where you will host the application artifacts -->
+        <app.url>http://localhost:8080/</app.url>
+
+        <!-- Optional scp target for application artifacts hosted at the above url -->
+        <app.deploy.target>w48839@fxldemo.tornado.no:fxldemo</app.deploy.target>
+
+        <!-- The app and launcher will be assembled in this folder -->
+        <app.dir>${project.build.directory}/app</app.dir>
+
+        <!-- Native installers will be built in this folder -->
+        <app.installerdir>${project.build.directory}/installer</app.installerdir>
+
+        <!-- Should the client downgrade if the server version is older than the local version? -->
+        <app.acceptDowngrade>false</app.acceptDowngrade>
+    </properties>
+
+    <dependencies>
+        <!--	spring	-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!--	javafx	-->
+        <dependency>
+            <groupId>com.jfoenix</groupId>
+            <artifactId>jfoenix</artifactId>
+            <version>${jfoenix.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.jensd</groupId>
+            <artifactId>fontawesomefx</artifactId>
+            <version>${fontawesomefx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>no.tornado</groupId>
+            <artifactId>fxlauncher</artifactId>
+            <version>${fxlauncher.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient</artifactId>
+            <version>4.1.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.70</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Compile project jar to appdir -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <outputDirectory>${app.dir}</outputDirectory>
+                </configuration>
+            </plugin>
+            <!-- Copy dependencies to appdir -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <configuration>
+                    <excludeScope>provided</excludeScope>
+                    <outputDirectory>${app.dir}</outputDirectory>
+                    <stripVersion>true</stripVersion>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <!-- Generate app.xml manifest -->
+                <executions>
+                    <execution>
+                        <id>create-manifest</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>fxlauncher.CreateManifest</mainClass>
+                            <arguments>
+                                <argument>${app.url}</argument>
+                                <argument>${app.mainClass}</argument>
+                                <argument>${app.dir}</argument>
+                                <argument>--cache-dir=${app.cacheDir}</argument>
+                                <argument>--accept-downgrade=${app.acceptDowngrade}</argument>
+                                <argument>--include-extensions=jpg</argument>
+                                <argument>${app.parameters}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <!-- Embed app.xml inside fxlauncher.xml so we don't need to reference app.xml to start the app -->
+                    <execution>
+                        <id>embed-manifest-in-launcher</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>jar</executable>
+                            <workingDirectory>${app.dir}</workingDirectory>
+                            <arguments>
+                                <argument>uf</argument>
+                                <argument>fxlauncher.jar</argument>
+                                <argument>app.xml</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <!-- Copy application artifacts to remote site using scp (optional) -->
+                    <execution>
+                        <id>deploy-app</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>scp</executable>
+                            <arguments>
+                                <argument>-r</argument>
+                                <argument>target/app/.</argument>
+                                <argument>${app.deploy.target}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <name>jcenter Repository</name>
+            <url>https://jcenter.bintray.com//</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
+</project>

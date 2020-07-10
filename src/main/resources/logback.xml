@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <property name="APP_NAME" value="lineyou"/>
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%-5p ${springAppName:-}) %clr(${PID:- }){magenta} --- [%t] [%L] %clr(%-40.40logger{39}){cyan} : %m%n"/>
+
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p ${APP_NAME:-} ${PID:- } --- [%t] [%L] %-40.40logger{39} : %m%n"/>
+
+    <!--控制台-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!--为了系统性能，生产环境中不打印 level 在 info 级别以下的日志-->
+    <root level="info" additivity="false">
+        <appender-ref ref="console"/>
+    </root>
+</configuration>

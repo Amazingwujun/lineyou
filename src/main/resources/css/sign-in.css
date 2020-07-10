@@ -1,0 +1,34 @@
+#leftPane > .label {
+    -fx-background-image: url('/img/title.png');
+}
+
+#close {
+    -fx-pref-width: 18;
+    -fx-pref-height: 18;
+    -fx-background-image: url('/img/close.png');
+}
+
+#close:hover {
+    -fx-background-color: #ff4f14;
+}
+
+.label {
+    -fx-font-size: 17;
+    -fx-background-repeat: no-repeat;
+}
+
+.jfx-button {
+    -jfx-button-type: FLAT;
+    -fx-background-color: #669966;
+    -fx-text-fill: white;
+    -fx-font-size: 17;
+    -fx-cursor: hand;
+}
+
+.jfx-text-field {
+    -fx-alignment: center;
+}
+
+.jfx-password-field {
+    -fx-alignment: center;
+}
