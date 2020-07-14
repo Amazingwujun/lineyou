@@ -2,6 +2,7 @@ package com.jun.lineyou.net;
 
 import com.jun.lineyou.channel.InnerChannel;
 import com.jun.lineyou.channel.Listener;
+import com.jun.lineyou.entity.InnerMsg;
 import com.jun.lineyou.entity.RemoteServer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 网络客户端
@@ -43,26 +45,26 @@ public class NetClient implements Listener {
 
     private RemoteServer remoteServer;
 
-    private int msgId;
+    private AtomicInteger msgId = new AtomicInteger(1);
 
     /**
      * 用户手动关闭连接标识
      */
     private boolean isManualClose = false;
 
-    @Value("${biz.remote-host:0.0.0.0}")
+    @Value("${remote.server.host:0.0.0.0}")
     private String remoteHost;
 
-    @Value("${biz.remote-port:1883}")
+    @Value("${remote.server.port:1883}")
     private int remotePort;
 
-    @Value("${biz.reconnect-duration:5}")
+    @Value("${reconnect.duration:5}")
     private int reconnectDuration;
 
     /**
      * 心跳周期，默认 60s
      */
-    @Value("${biz.heartbeat-duration:60}")
+    @Value("${heartbeat.duration:60}")
     private int heartbeatDuration;
 
     private BizHandler bizHandler;
@@ -109,7 +111,7 @@ public class NetClient implements Listener {
             }
 
             //notify connect success
-            InnerChannel.notify("connect success");
+            InnerChannel.notify(InnerMsg.success(InnerMsg.InnerMsgEnum.connect_init));
 
             channel.closeFuture().sync();
         } catch (Exception e) {
@@ -160,16 +162,21 @@ public class NetClient implements Listener {
         isManualClose = true;
     }
 
-    public synchronized int genMsgId() {
-        if (msgId > 65535 || msgId < 1) {
-            msgId = 1;
+    /**
+     * 生成 mqtt 消息id
+     *
+     * @return
+     */
+    public int genMsgId() {
+        if (msgId.get() > 65535 || msgId.get() < 1) {
+            msgId.set(1);
         }
-        return msgId++;
+        return msgId.getAndIncrement();
     }
 
     @Override
-    public void action(Object msg) {
-        if ("reconnect".equals(msg)) {
+    public void action(InnerMsg msg) {
+        if (msg.getType() == InnerMsg.InnerMsgEnum.reconnect) {
             start();
         }
     }

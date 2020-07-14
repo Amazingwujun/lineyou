@@ -3,7 +3,6 @@ package com.jun.lineyou;
 import com.jun.lineyou.annotation.ViewController;
 import com.jun.lineyou.constant.ViewFxml;
 import com.jun.lineyou.entity.ControllerAndView;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import org.springframework.context.ApplicationContext;

@@ -5,10 +5,14 @@ package com.jun.lineyou.constant;
  */
 public enum ViewFxml {
 
-    /** 登入视图 */
+    /**
+     * 登入视图
+     */
     SIGN_IN("/fxml/sign-in.fxml"),
 
-    /** 主视图 */
+    /**
+     * 主视图
+     */
     MAIN("/fxml/main.fxml");
 
     private final String name;

@@ -1,6 +1,7 @@
 package com.jun.lineyou.net;
 
 import com.jun.lineyou.channel.InnerChannel;
+import com.jun.lineyou.entity.InnerMsg;
 import com.jun.lineyou.net.handler.MessageDelegatingHandler;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -40,7 +41,7 @@ public class BizHandler extends SimpleChannelInboundHandler<MqttMessage> {
 
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx)   {
+    public void channelActive(ChannelHandlerContext ctx) {
 
     }
 
@@ -48,7 +49,9 @@ public class BizHandler extends SimpleChannelInboundHandler<MqttMessage> {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         ChannelId id = ctx.channel().id();
         log.info("channel:{} inactive", id.asShortText());
-        InnerChannel.notify("reconnect");
+
+        //连接断开，开启断线重连机制
+        InnerChannel.notify(InnerMsg.success(InnerMsg.InnerMsgEnum.reconnect));
     }
 
 

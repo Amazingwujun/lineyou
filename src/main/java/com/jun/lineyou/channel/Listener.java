@@ -1,5 +1,7 @@
 package com.jun.lineyou.channel;
 
+import com.jun.lineyou.entity.InnerMsg;
+
 /**
  * 监听器
  *
@@ -8,5 +10,5 @@ package com.jun.lineyou.channel;
  */
 public interface Listener {
 
-    void action(Object msg);
+    void action(InnerMsg msg);
 }

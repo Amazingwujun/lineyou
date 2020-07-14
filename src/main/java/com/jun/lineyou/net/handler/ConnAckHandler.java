@@ -2,6 +2,7 @@ package com.jun.lineyou.net.handler;
 
 import com.jun.lineyou.annotation.MqttHandler;
 import com.jun.lineyou.channel.InnerChannel;
+import com.jun.lineyou.entity.InnerMsg;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.mqtt.*;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +25,14 @@ public class ConnAckHandler implements MqttMessageHandler {
     /**
      * 心跳周期，默认 60s
      */
-    @Value("${biz.heartbeat-duration:60}")
+    @Value("${heartbeat.duration:60}")
     private int heartbeatDuration;
 
     @Override
     public void process(ChannelHandlerContext ctx, MqttMessage msg) {
         log.info("receive connack:{}", msg);
 
-        InnerChannel.notify("sign in success");
+        InnerChannel.notify(InnerMsg.success(InnerMsg.InnerMsgEnum.sign_in));
 
         startHeartbeat(ctx);
     }

@@ -8,24 +8,55 @@
     -fx-background-radius: 5px;
     -fx-background-color: #ff846b;
     -fx-font-family: 'Microsoft JhengHei';
-    -fx-font-style: 12px
-}
-
-#close {
-    -fx-pref-width: 18;
-    -fx-pref-height: 18;
-    -fx-background-image: url('/img/close.png');
+    -fx-font-size: 12px
 }
 
 #close:hover {
-    -fx-background-color: #ff4f14;
+    -fx-fill: red;
 }
 
 .jfx-button {
     -fx-padding: 3px;
     -jfx-button-type: FLAT;
-    -fx-background-color: #bdbdbd;
+    -fx-background-color: #dfdfdf;
     -fx-text-fill: #273136;
     -fx-font-size: 15px;
     -fx-cursor: hand;
+}
+
+.jfx-button:hover {
+    -fx-background-color: #2c9160;
+}
+
+#friendsView {
+    -fx-background-color: #eeebe8;
+}
+
+#msgView {
+    -fx-background-color: transparent;
+}
+
+#friendsView .list-cell {
+    -fx-background-color: #eeebe8;
+}
+#friendsView .list-cell:selected {
+    -fx-background-color: #a8a6a5;
+}
+#friendsView .list-cell:hover:selected {
+    -fx-background-color: #a8a6a5;
+}
+#friendsView .list-cell:hover {
+    -fx-background-color: #cccac9;
+}
+
+.split-pane *.split-pane-divider {
+    -fx-padding: 0.5;
+}
+
+.text-area {
+    -fx-background-color: white;
+}
+
+.text-area .content {
+    -fx-background-color: white;
 }

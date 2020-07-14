@@ -18,24 +18,24 @@ public class RemoteServer {
         return remoteHost.get();
     }
 
-    public SimpleStringProperty remoteHostProperty() {
-        return remoteHost;
-    }
-
     public void setRemoteHost(String remoteHost) {
         this.remoteHost.set(remoteHost);
+    }
+
+    public SimpleStringProperty remoteHostProperty() {
+        return remoteHost;
     }
 
     public int getRemotePort() {
         return remotePort.get();
     }
 
-    public SimpleIntegerProperty remotePortProperty() {
-        return remotePort;
-    }
-
     public void setRemotePort(int remotePort) {
         this.remotePort.set(remotePort);
+    }
+
+    public SimpleIntegerProperty remotePortProperty() {
+        return remotePort;
     }
 
     @Override

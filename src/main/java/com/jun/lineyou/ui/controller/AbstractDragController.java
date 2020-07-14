@@ -42,7 +42,7 @@ public abstract class AbstractDragController {
         }
     }
 
-    protected void initDrag(List<Node> nodes){
+    protected void initDrag(List<Node> nodes) {
         nodes.forEach(node -> {
             node.setOnMousePressed(this::handleMouseEvent);
             node.setOnMouseDragged(this::handleMouseEvent);

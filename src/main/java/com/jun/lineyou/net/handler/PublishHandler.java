@@ -28,6 +28,6 @@ public class PublishHandler implements MqttMessageHandler {
         payload.readBytes(data);
         log.info("publish:{}", new String(data, StandardCharsets.UTF_8));
 
-        InnerChannel.notify(new InnerMsg(new String(data),1));
+        InnerChannel.notify(InnerMsg.success(InnerMsg.InnerMsgEnum.pub, new String(data,StandardCharsets.UTF_8)));
     }
 }

@@ -2,7 +2,6 @@ package com.jun.lineyou.net.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.mqtt.MqttMessage;
-import io.netty.handler.codec.mqtt.MqttMessageType;
 
 /**
  * 消息处理器

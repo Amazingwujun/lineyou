@@ -13,7 +13,7 @@ public class ExecutorUtils {
 
     private static ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-    public static void run(Runnable runnable){
+    public static void run(Runnable runnable) {
         executorService.execute(runnable);
     }
 }

@@ -8,25 +8,29 @@ import com.jun.lineyou.annotation.ViewController;
 import com.jun.lineyou.channel.Listener;
 import com.jun.lineyou.constant.ViewFxml;
 import com.jun.lineyou.entity.ControllerAndView;
+import com.jun.lineyou.entity.InnerMsg;
 import com.jun.lineyou.entity.User;
 import com.jun.lineyou.net.NetClient;
 import com.jun.lineyou.utils.ExecutorUtils;
 import com.jun.lineyou.utils.ViewContainer;
-import io.netty.handler.codec.mqtt.*;
+import io.netty.handler.codec.mqtt.MqttConnectMessage;
+import io.netty.handler.codec.mqtt.MqttMessageBuilders;
+import io.netty.handler.codec.mqtt.MqttQoS;
+import io.netty.handler.codec.mqtt.MqttSubscribeMessage;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 
@@ -40,32 +44,26 @@ import java.util.Arrays;
 @ViewController(fxml = ViewFxml.SIGN_IN)
 public class SignInController extends AbstractDragController implements Listener {
 
+    public JFXButton signIn;
+    @FXML
+    public JFXTextField username;
+    @FXML
+    public JFXPasswordField password;
+    public Text close;
+    public ImageView logo;
+    public AnchorPane leftPane, rightPane;
     /**
      * 实例化登入用户
      */
     private User user = new User();
-
-    public JFXButton signIn;
-
-    @FXML
-    public JFXTextField username;
-
-    @FXML
-    public JFXPasswordField password;
-
-    public Label close;
-
-    public ImageView logo;
-
-    public AnchorPane leftPane, rightPane;
-
-    @Autowired
     private FxmlHandler fxmlHandler;
 
-    @Autowired
     private NetClient netClient;
 
-    private String signInServerUrl = "http://localhost:8080/api/signIn";
+    public SignInController(FxmlHandler fxmlHandler, NetClient netClient) {
+        this.fxmlHandler = fxmlHandler;
+        this.netClient = netClient;
+    }
 
     public void initialize() {
         log.info("sign-in controller init");
@@ -75,7 +73,10 @@ public class SignInController extends AbstractDragController implements Listener
         initResourceLoad();
 
         //监听关闭事件
-        close.setOnMouseClicked(event -> System.exit(0));
+        close.setOnMouseClicked(event -> {
+            netClient.close();
+            System.exit(0);
+        });
     }
 
     public void signIn(ActionEvent actionEvent) {
@@ -85,7 +86,7 @@ public class SignInController extends AbstractDragController implements Listener
         target.setText("正在登录...");
         target.setDisable(true);
 
-        if (!user.getUsername().matches("1[1-9][0-9]{9}")){
+        if (!user.getUsername().matches("1[1-9][0-9]{9}")) {
             target.setText("手机号码格式错误");
             target.setDisable(false);
             return;
@@ -113,7 +114,7 @@ public class SignInController extends AbstractDragController implements Listener
      * 初始化窗口拖拽处理
      */
     private void initStageDrag() {
-        initDrag(Arrays.asList(leftPane,rightPane));
+        initDrag(Arrays.asList(leftPane, rightPane));
     }
 
     @Override
@@ -122,13 +123,15 @@ public class SignInController extends AbstractDragController implements Listener
     }
 
     @Override
-    public void action(Object msg) {
+    public void action(InnerMsg msg) {
         log.info("rec:{}", msg);
 
-        if ("sign in success".equals(msg)) {
+        if (InnerMsg.InnerMsgEnum.sign_in == msg.getType() && msg.isSuccess()) {
             onSignInSucceeded();
+        } else if (InnerMsg.InnerMsgEnum.sign_in == msg.getType() && !msg.isSuccess()) {
+            //todo 暂时只处理登入成功
         }
-        if ("connect success".equals(msg)) {
+        if (InnerMsg.InnerMsgEnum.connect_init == msg.getType()) {
             //登入
             MqttConnectMessage build = MqttMessageBuilders.connect()
                     .cleanSession(false)
@@ -149,9 +152,9 @@ public class SignInController extends AbstractDragController implements Listener
         //订阅 topic
         MqttSubscribeMessage submsg = MqttMessageBuilders
                 .subscribe()
-                .messageId(1)
+                .messageId(netClient.genMsgId())
                 .addSubscription(MqttQoS.AT_LEAST_ONCE, "resp/signIn/" + user.getUsername())
-                .addSubscription(MqttQoS.AT_LEAST_ONCE,"chat/msg/" + user.getUsername())
+                .addSubscription(MqttQoS.AT_LEAST_ONCE, "chat/msg/" + user.getUsername())
                 .build();
         netClient.send(submsg);
 
@@ -161,11 +164,18 @@ public class SignInController extends AbstractDragController implements Listener
                 //加载主页面
                 ControllerAndView<MainController, Node> controllerAndView = fxmlHandler.loadControllerAndView(MainController.class);
                 ViewContainer.MAIN = new Stage();
-                ViewContainer.MAIN.setScene(new Scene((Parent) controllerAndView.getView()));
+                Scene scene = new Scene((Parent) controllerAndView.getView());
+                scene.setFill(Color.TRANSPARENT);
+                ViewContainer.MAIN.setScene(scene);
+                ViewContainer.MAIN.initStyle(StageStyle.TRANSPARENT);
                 ViewContainer.MAIN.show();
 
                 currentStage().close();
             });
+        } else {
+            if (!ViewContainer.MAIN.isShowing()) {
+                Platform.runLater(() -> ViewContainer.MAIN.show());
+            }
         }
     }
 }

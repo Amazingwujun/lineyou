@@ -18,23 +18,23 @@ public class User {
         return username.get();
     }
 
-    public SimpleStringProperty usernameProperty() {
-        return username;
-    }
-
     public void setUsername(String username) {
         this.username.set(username);
+    }
+
+    public SimpleStringProperty usernameProperty() {
+        return username;
     }
 
     public String getPassword() {
         return password.get();
     }
 
-    public SimpleStringProperty passwordProperty() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password.set(password);
+    }
+
+    public SimpleStringProperty passwordProperty() {
+        return password;
     }
 }

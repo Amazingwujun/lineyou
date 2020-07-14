@@ -1,5 +1,6 @@
 package com.jun.lineyou.channel;
 
+import com.jun.lineyou.entity.InnerMsg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -18,7 +19,7 @@ import java.util.concurrent.BlockingQueue;
 @Component
 public class InnerChannel implements Runnable {
 
-    private static final BlockingQueue<Object> queue = new ArrayBlockingQueue<>(10000);
+    private static final BlockingQueue<InnerMsg> queue = new ArrayBlockingQueue<>(10000);
 
     private List<Listener> listeners;
 
@@ -29,11 +30,11 @@ public class InnerChannel implements Runnable {
         new Thread(this, this.getClass().getName()).start();
     }
 
-    public static void notify(Object msg) {
+    public static void notify(InnerMsg msg) {
         queue.add(msg);
     }
 
-    private void notifyListener(Object msg) {
+    private void notifyListener(InnerMsg msg) {
         listeners.forEach(listener -> listener.action(msg));
     }
 
@@ -44,7 +45,7 @@ public class InnerChannel implements Runnable {
         //noinspection InfiniteLoopStatement
         while (true) {
             try {
-                Object msg = queue.take();
+                InnerMsg msg = queue.take();
 
                 notifyListener(msg);
             } catch (Exception e) {

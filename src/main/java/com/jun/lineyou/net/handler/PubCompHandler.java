@@ -1,7 +1,6 @@
 package com.jun.lineyou.net.handler;
 
 import com.jun.lineyou.annotation.MqttHandler;
-import com.jun.lineyou.channel.InnerChannel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.mqtt.MqttMessage;
 import io.netty.handler.codec.mqtt.MqttMessageType;
@@ -19,6 +18,6 @@ public class PubCompHandler implements MqttMessageHandler {
 
     @Override
     public void process(ChannelHandlerContext ctx, MqttMessage msg) {
-        InnerChannel.notify(msg);
+        //暂不处理
     }
 }

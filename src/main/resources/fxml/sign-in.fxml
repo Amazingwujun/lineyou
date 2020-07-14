@@ -3,12 +3,13 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="400" prefWidth="278" stylesheets="/css/sign-in.css" xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml" fx:controller="com.jun.lineyou.ui.controller.SignInController">
+<AnchorPane prefHeight="400" prefWidth="278" stylesheets="/css/sign-in.css" xmlns="http://javafx.com/javafx/8.0.241"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jun.lineyou.ui.controller.SignInController">
     <children>
         <GridPane layoutX="39.0" layoutY="147.0" prefHeight="400.0" prefWidth="278.0" AnchorPane.bottomAnchor="0.0"
                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -29,7 +30,8 @@
                 </AnchorPane>
                 <AnchorPane fx:id="rightPane" prefHeight="27.0" prefWidth="139.0" GridPane.columnIndex="1">
                     <children>
-                        <Label fx:id="close" layoutX="110" layoutY="0"/>
+                        <FontAwesomeIconView fx:id="close" glyphName="CLOSE" layoutX="103.0" layoutY="18.0" size="18"
+                                             AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
                     </children>
                 </AnchorPane>
                 <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
@@ -78,7 +80,8 @@
                 </AnchorPane>
                 <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                     <children>
-                        <JFXButton fx:id="signIn" onAction="#signIn" layoutX="40.0" prefHeight="36.0" prefWidth="185.0" text="登入"/>
+                        <JFXButton fx:id="signIn" layoutX="40.0" onAction="#signIn" prefHeight="36.0" prefWidth="185.0"
+                                   text="登入"/>
                     </children>
                 </AnchorPane>
             </children>

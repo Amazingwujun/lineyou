@@ -10,9 +10,13 @@ public class Message {
 
     private Integer messageId;
 
-    /** 纳秒 */
+    /**
+     * 纳秒
+     */
     private Long sendTime = System.nanoTime();
 
-    /** 消息内容 */
+    /**
+     * 消息内容
+     */
     private String content;
 }
