@@ -3,20 +3,20 @@ package com.jun.lineyou.ui.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.jun.lineyou.FxmlHandler;
+import com.jun.lineyou.utils.FxmlHandler;
 import com.jun.lineyou.annotation.ViewController;
 import com.jun.lineyou.channel.Listener;
+import com.jun.lineyou.constant.Topic;
 import com.jun.lineyou.constant.ViewFxml;
 import com.jun.lineyou.entity.ControllerAndView;
 import com.jun.lineyou.entity.InnerMsg;
+import com.jun.lineyou.entity.ProtoMsg;
 import com.jun.lineyou.entity.User;
 import com.jun.lineyou.net.NetClient;
 import com.jun.lineyou.utils.ExecutorUtils;
 import com.jun.lineyou.utils.ViewContainer;
-import io.netty.handler.codec.mqtt.MqttConnectMessage;
-import io.netty.handler.codec.mqtt.MqttMessageBuilders;
-import io.netty.handler.codec.mqtt.MqttQoS;
-import io.netty.handler.codec.mqtt.MqttSubscribeMessage;
+import io.netty.buffer.Unpooled;
+import io.netty.handler.codec.mqtt.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -55,7 +55,7 @@ public class SignInController extends AbstractDragController implements Listener
     /**
      * 实例化登入用户
      */
-    private User user = new User();
+    public static final User user = new User();
     private FxmlHandler fxmlHandler;
 
     private NetClient netClient;
@@ -132,6 +132,11 @@ public class SignInController extends AbstractDragController implements Listener
             //todo 暂时只处理登入成功
         }
         if (InnerMsg.InnerMsgEnum.connect_init == msg.getType()) {
+            ProtoMsg.UserStateMessage userStateMessage = ProtoMsg.UserStateMessage.newBuilder()
+                    .setOnline(false)
+                    .setMobile(user.getUsername())
+                    .build();
+
             //登入
             MqttConnectMessage build = MqttMessageBuilders.connect()
                     .cleanSession(false)
@@ -139,6 +144,11 @@ public class SignInController extends AbstractDragController implements Listener
                     .keepAlive(60)
                     .password(user.getPassword().getBytes())
                     .username(user.getUsername())
+                    .willFlag(true)
+                    .willQoS(MqttQoS.AT_MOST_ONCE)
+                    .willRetain(false)
+                    .willMessage(userStateMessage.toByteArray())
+                    .willTopic(Topic.USER_STATE_CHANGE)
                     .build();
 
             netClient.send(build);
@@ -155,8 +165,24 @@ public class SignInController extends AbstractDragController implements Listener
                 .messageId(netClient.genMsgId())
                 .addSubscription(MqttQoS.AT_LEAST_ONCE, "resp/signIn/" + user.getUsername())
                 .addSubscription(MqttQoS.AT_LEAST_ONCE, "chat/msg/" + user.getUsername())
+                .addSubscription(MqttQoS.AT_LEAST_ONCE, Topic.USER_STATE_CHANGE)
                 .build();
         netClient.send(submsg);
+
+        //成功上线
+        ProtoMsg.UserStateMessage userStateMessage = ProtoMsg.UserStateMessage.newBuilder()
+                .setOnline(true)
+                .setMobile(user.getUsername())
+                .build();
+        MqttPublishMessage onlineMsg = MqttMessageBuilders
+                .publish()
+                .messageId(netClient.genMsgId())
+                .qos(MqttQoS.AT_LEAST_ONCE)
+                .retained(false)
+                .topicName(Topic.USER_STATE_CHANGE)
+                .payload(Unpooled.wrappedBuffer(userStateMessage.toByteArray()))
+                .build();
+        netClient.send(onlineMsg);
 
         //加载主界面
         if (ViewContainer.MAIN == null) {

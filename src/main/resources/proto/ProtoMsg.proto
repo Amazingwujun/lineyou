@@ -1,17 +1,22 @@
 syntax = "proto3";
+option java_package = "com.jun.lineyou.entity";
+option java_outer_classname = "ProtoMsg";
 
 //用户状态消息
 message UserStateMessage {
   bool online = 1;      //是否在线，用于展示
   string mobile = 2;    //手机号 - 识别id
+  string nickname = 3;  //昵称
+  string avatar = 4;  //头像
 }
 
 //聊天消息
 message ChatMessage {
   string from = 1;  //消息来源
   string to = 2;  //接收对象id - 手机号
-  sint64 timestamp = 3; //时间戳
-  string msg = 4; //消息内容
+  sint32 seqId = 3;
+  sint64 timestamp = 4; //时间戳
+  string msg = 5; //消息内容
 }
 
 //登入响应

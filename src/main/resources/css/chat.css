@@ -1,0 +1,32 @@
+.msg {
+    -fx-padding: 5px;
+    -fx-background-radius: 5px;
+    -fx-font-family: "Microsoft JhengHei Light";
+    -fx-font-size: 12px;
+    -fx-text-fill: black;
+}
+
+.self {
+    -fx-background-color: #9eea6a;
+}
+
+.other {
+    -fx-background-color: white;
+}
+
+.timestamp {
+    -fx-padding: 1;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-background-color: #bdbdbd;
+    -fx-font-family: Consolas;
+    -fx-background-radius: 3px;
+}
+
+.nickname {
+    -fx-padding: 2px;
+    -fx-background-radius: 5px;
+    -fx-font-size: 12px;
+    -fx-background-color: #d28826;
+    -fx-font-family: "Microsoft JhengHei UI";
+}

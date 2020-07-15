@@ -1,8 +1,8 @@
-package com.jun.lineyou.ui.app;
+package com.jun.lineyou;
 
-import com.jun.lineyou.FxmlHandler;
 import com.jun.lineyou.entity.ControllerAndView;
 import com.jun.lineyou.ui.controller.SignInController;
+import com.jun.lineyou.utils.FxmlHandler;
 import com.jun.lineyou.utils.SpringUtils;
 import com.jun.lineyou.utils.ViewContainer;
 import javafx.application.Application;
@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * javafx应用启动器
@@ -22,6 +23,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        initSpringCtx();
 
         ViewContainer.SIGN_IN = primaryStage;
         FxmlHandler fxmlHandler = SpringUtils.getBean(FxmlHandler.class);
@@ -31,5 +33,11 @@ public class App extends Application {
         primaryStage.setScene(new Scene((Parent) controllerAndView.getView()));
         primaryStage.initStyle(StageStyle.TRANSPARENT);
         primaryStage.show();
+    }
+
+    //初始化 spring 容器
+    private void initSpringCtx() {
+        ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("spring/spring-core.xml");
+        SpringUtils.setCtx(ctx);
     }
 }

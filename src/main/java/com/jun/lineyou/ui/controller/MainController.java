@@ -1,11 +1,14 @@
 package com.jun.lineyou.ui.controller;
 
-import com.jfoenix.controls.JFXListView;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.jun.lineyou.annotation.ViewController;
 import com.jun.lineyou.channel.Listener;
+import com.jun.lineyou.constant.Topic;
 import com.jun.lineyou.constant.ViewFxml;
 import com.jun.lineyou.entity.InnerMsg;
+import com.jun.lineyou.entity.ProtoMsg;
 import com.jun.lineyou.net.NetClient;
+import com.jun.lineyou.utils.PaneUtils;
 import com.jun.lineyou.utils.ViewContainer;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import io.netty.buffer.Unpooled;
@@ -13,12 +16,13 @@ import io.netty.handler.codec.mqtt.MqttMessageBuilders;
 import io.netty.handler.codec.mqtt.MqttPublishMessage;
 import io.netty.handler.codec.mqtt.MqttQoS;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Label;
+import javafx.scene.Node;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -26,10 +30,8 @@ import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 主页面控制器
@@ -41,12 +43,21 @@ import java.util.Arrays;
 @ViewController(fxml = ViewFxml.MAIN)
 public class MainController extends AbstractDragController implements Listener {
 
+    public SplitPane splitPane;
+
+    /**
+     * 默认头像
+     */
+    private Image defaultAvatar = new Image(getClass().getResourceAsStream("/img/avatar.jpg"));
+
+    public TextField searchWord;
+
     /**
      * 发送对象
      */
     private String to;
 
-    public JFXListView<AnchorPane> msgView;
+    public ListView<AnchorPane> msgView;
     public ListView<AnchorPane> friendsView;
     public TextArea sendMsg;
     public FontAwesomeIconView close;
@@ -55,7 +66,6 @@ public class MainController extends AbstractDragController implements Listener {
     private NetClient netClient;
 
     public MainController(NetClient netClient) {
-        super();
         this.netClient = netClient;
     }
 
@@ -67,12 +77,16 @@ public class MainController extends AbstractDragController implements Listener {
             System.exit(0);
         });
 
-        friendsView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            to = newValue.getId();
-        });
+        splitPane.getDividers().forEach(divider -> divider.positionProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() > 0.9) {
+                divider.setPosition(0.9);
+            }
+            if (newValue.doubleValue() < 0.1) {
+                divider.setPosition(0.1);
+            }
+        }));
 
-        //为了便于测试，生成两个默认用户
-        friendsView.getItems().addAll(friendsView("小白", "17620078988"), friendsView("小黑", "15679197197"));
+        friendsView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> to = newValue.getId());
     }
 
 
@@ -81,90 +95,134 @@ public class MainController extends AbstractDragController implements Listener {
         return ViewContainer.MAIN;
     }
 
-
     @Override
     public void action(InnerMsg msg) {
         if (InnerMsg.InnerMsgEnum.pub != msg.getType()) {
             return;
         }
-        Platform.runLater(() -> {
-            Label msgLabel = new Label();
-            Label timeLabel = new Label(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss")));
-            timeLabel.setStyle("-fx-padding: 1;-fx-text-fill: white;-fx-font-style: bold;-fx-font-size: 11px;-fx-background-color: #bdbdbd;-fx-font-family: Consolas;-fx-background-radius: 3px;");
+        InnerMsg.PubMsg data = (InnerMsg.PubMsg) msg.getData();
+        final String topic = data.topic();
+        final byte[] bytes = data.msg();
 
-            ImageView avatar = new ImageView();
-            avatar.setFitWidth(30);
-            avatar.setFitHeight(30);
+        if (topic.equals("chat/msg/" + SignInController.user.getUsername())) {
+            Platform.runLater(() -> {
+                try {
+                    ProtoMsg.ChatMessage chatMessage = ProtoMsg.ChatMessage.parseFrom(bytes);
 
-            //锚定消息
-            AnchorPane.setLeftAnchor(timeLabel, (double) 40);
-            AnchorPane.setLeftAnchor(msgLabel, (double) 40);
-            AnchorPane.setTopAnchor(msgLabel, (double) 20);
+                    String strMsg = chatMessage.getMsg();
+                    AnchorPane self = PaneUtils.other(
+                            new Image(getClass().getResourceAsStream("/img/avatar.jpg")),
+                            strMsg,
+                            msgView.widthProperty()
+                    );
+                    msgView.getItems().add(self);
+                } catch (InvalidProtocolBufferException e) {
+                    e.printStackTrace();
+                }
+            });
+        } else if (Topic.USER_STATE_CHANGE.equals(topic)) {
+            //用户状态变更
+            try {
+                ProtoMsg.UserStateMessage userStateMessage = ProtoMsg.UserStateMessage.parseFrom(bytes);
+                String mobile = userStateMessage.getMobile();
+                String nickname = userStateMessage.getNickname();
+                boolean online = userStateMessage.getOnline();
 
-            msgLabel.setWrapText(true);
-            msgLabel.setPrefHeight(Label.USE_COMPUTED_SIZE);
-            msgLabel.setPrefWidth(Label.USE_COMPUTED_SIZE);
-            msgLabel.maxWidthProperty().bind(msgView.widthProperty().divide(2.2));
-            msgLabel.setStyle("-fx-padding: 5,3,3,3;-fx-background-radius: 5px;-fx-background-color: #ff846b;-fx-font-family: 'Microsoft JhengHei';-fx-font-size: 12px");
-            msgLabel.setText((String) msg.getData());
+                //忽略自己
+                if (SignInController.user.getUsername().equals(mobile)) {
+                    return;
+                }
 
-            AnchorPane chatPane = new AnchorPane();
-            chatPane.getChildren().addAll(avatar, msgLabel, timeLabel);
-            avatar.setImage(new Image(getClass().getResourceAsStream("/img/avatar.jpg")));
-
-            msgView.getItems().add(chatPane);
-        });
+                //更新朋友状态
+                Platform.runLater(() -> {
+                    AnchorPane anchorPane = null;
+                    for (AnchorPane item : friendsView.getItems()) {
+                        if (Objects.equals(item.getId(), mobile)) {
+                            anchorPane = item;
+                        }
+                    }
+                    if (anchorPane == null) {
+                        if (online) {
+                            whenFriendOnline(mobile, nickname);
+                        }
+                    } else {
+                        for (Node child : anchorPane.getChildren()) {
+                            if (child instanceof Circle) {
+                                ((Circle) child).setFill(online ? Paint.valueOf("green") : Paint.valueOf("gray"));
+                                break;
+                            }
+                        }
+                    }
+                });
+            } catch (InvalidProtocolBufferException e) {
+                e.printStackTrace();
+            }
+        }
     }
-
 
     private AnchorPane friendsView(String nickname, String mobile) {
-        AnchorPane pane = new AnchorPane();
-        pane.setId(mobile);
-        ImageView avatar = new ImageView(); //头像
-        Label nicknameLabel = new Label();
-        Circle online = new Circle();
-
-        //头像
-        avatar.setFitHeight(30);
-        avatar.setFitWidth(30);
-        avatar.setImage(new Image(getClass().getResourceAsStream("/img/avatar.jpg")));
-
-        //昵称
-        AnchorPane.setLeftAnchor(nicknameLabel, (double) 40);
-        nicknameLabel.setText(nickname);
-        nicknameLabel.setStyle("-fx-padding: 3;-fx-background-radius: 5px;-fx-font-size: 12px");
-
-        //在线状态
-        AnchorPane.setLeftAnchor(online, (double) 40);
-        AnchorPane.setTopAnchor(online, (double) 20);
-        online.setRadius(5);
-        online.setFill(Paint.valueOf("green"));
-
-        pane.getChildren().addAll(avatar, nicknameLabel, online);
-
-        return pane;
+        return PaneUtils.friend(new Image(getClass().getResourceAsStream("/img/avatar.jpg")), mobile, nickname);
     }
-
 
     /**
      * 发送消息给其它人
-     *
-     * @param actionEvent
      */
-    public void sendMsg(ActionEvent actionEvent) {
+    public void sendMsg() {
         if (StringUtils.isEmpty(to)) {
             //
             log.error("必须选择一个对象");
         } else {
+            String msgText = sendMsg.getText();
+            ProtoMsg.ChatMessage chatMessage = ProtoMsg.ChatMessage.newBuilder()
+                    .setMsg(msgText)
+                    .setFrom(SignInController.user.getUsername())
+                    .setTo(to)
+                    .setTimestamp(System.currentTimeMillis())
+                    .build();
+
             MqttPublishMessage msg = MqttMessageBuilders.publish()
                     .messageId(netClient.genMsgId())
                     .qos(MqttQoS.AT_MOST_ONCE)
                     .retained(false)
-                    .payload(Unpooled.wrappedBuffer(sendMsg.getText().getBytes(StandardCharsets.UTF_8)))
+                    .payload(Unpooled.wrappedBuffer(chatMessage.toByteArray()))
                     .topicName("chat/msg/" + to)
                     .build();
 
             netClient.send(msg);
+
+            Platform.runLater(() -> {
+                sendMsg.clear();
+                AnchorPane self = PaneUtils.self(new Image(getClass().getResourceAsStream("/img/avatar.jpg")), msgText, msgView.widthProperty());
+                msgView.getItems().add(self);
+            });
         }
+    }
+
+    /**
+     * 搜索其它人
+     *
+     * @param event
+     */
+    public void searchFriend(MouseEvent event) {
+        String mobile = searchWord.getText();
+        if (StringUtils.isEmpty(mobile)) {
+            return;
+        }
+
+        //
+        MqttPublishMessage search = MqttMessageBuilders.publish()
+                .topicName("chat/searchOther/" + mobile)
+                .retained(false)
+                .payload(Unpooled.EMPTY_BUFFER)
+                .messageId(netClient.genMsgId())
+                .qos(MqttQoS.AT_LEAST_ONCE)
+                .build();
+
+        netClient.send(search);
+    }
+
+    private void whenFriendOnline(String mobile, String nickname) {
+        AnchorPane friend = PaneUtils.friend(defaultAvatar, mobile, nickname);
+        friendsView.getItems().add(friend);
     }
 }

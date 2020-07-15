@@ -7,9 +7,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.mqtt.MqttMessage;
 import io.netty.handler.codec.mqtt.MqttMessageType;
+import io.netty.handler.codec.mqtt.MqttPublishMessage;
 import lombok.extern.slf4j.Slf4j;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * {@link MqttMessageType#PUBLISH} 消息处理器
@@ -23,11 +22,13 @@ public class PublishHandler implements MqttMessageHandler {
 
     @Override
     public void process(ChannelHandlerContext ctx, MqttMessage msg) {
-        ByteBuf payload = (ByteBuf) msg.payload();
-        byte[] data = new byte[payload.readableBytes()];
-        payload.readBytes(data);
-        log.info("publish:{}", new String(data, StandardCharsets.UTF_8));
+        MqttPublishMessage mpm = (MqttPublishMessage) msg;
 
-        InnerChannel.notify(InnerMsg.success(InnerMsg.InnerMsgEnum.pub, new String(data,StandardCharsets.UTF_8)));
+        String topicName = mpm.variableHeader().topicName();
+        ByteBuf payload = mpm.payload();
+        byte[] payloadBytes = new byte[payload.readableBytes()];
+        payload.readBytes(payloadBytes);
+
+        InnerChannel.notify(InnerMsg.success(InnerMsg.InnerMsgEnum.pub, new InnerMsg.PubMsg(topicName, payloadBytes)));
     }
 }

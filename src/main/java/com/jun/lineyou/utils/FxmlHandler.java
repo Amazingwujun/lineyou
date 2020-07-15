@@ -1,4 +1,4 @@
-package com.jun.lineyou;
+package com.jun.lineyou.utils;
 
 import com.jun.lineyou.annotation.ViewController;
 import com.jun.lineyou.constant.ViewFxml;

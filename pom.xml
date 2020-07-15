@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.jun</groupId>
     <artifactId>lineyou</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>lineyou</name>
     <description>im 客户端</description>
 
@@ -15,16 +15,17 @@
         <netty.version>4.1.50.Final</netty.version>
         <fxlauncher.version>1.0.20</fxlauncher.version>
         <fontawesomefx.version>8.9</fontawesomefx.version>
+        <protobuf.version>3.12.2</protobuf.version>
 
         <!--    fxlauncher properties    -->
         <!-- Installer Filename without suffix -->
         <app.filename>lineyou</app.filename>
 
         <!-- The JavaFX Application class name -->
-        <app.mainClass>no.tornado.FxlDemo</app.mainClass>
+        <app.mainClass>com.jun.lineyou.App</app.mainClass>
 
         <!-- Optional override to specify where the cached files are stored. Default is current working directory -->
-        <app.cacheDir>USERLIB/FxlDemo</app.cacheDir>
+        <app.cacheDir>USERLIB/lineyou</app.cacheDir>
 
         <!-- Optional parameters to the application, will be embedded in the launcher and can be overriden on the command line -->
         <app.parameters>--myOption=myValue --myOtherOption=myOtherValue</app.parameters>
@@ -33,7 +34,7 @@
         <app.vendor>Acme Inc</app.vendor>
 
         <!-- The Application version used by javapackager -->
-        <app.version>2.0</app.version>
+        <app.version>0.0.1</app.version>
 
         <!-- Base URL where you will host the application artifacts -->
         <app.url>http://localhost:8080/</app.url>
@@ -120,6 +121,11 @@
             <version>1.2.70</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -10,11 +10,14 @@ import lombok.Data;
  */
 @Data
 public class InnerMsg {
+
     private static final int SUCCESS = 200;
+
     /**
      * 数据
      */
     private Object data;
+
     /**
      * 消息类别：
      * <ol>
@@ -23,6 +26,7 @@ public class InnerMsg {
      * </ol>
      */
     private InnerMsgEnum type;
+
     /**
      * 执行结果，用来判断某些操作类别消息的返回结果，例如登入
      * <ol>
@@ -55,6 +59,27 @@ public class InnerMsg {
     }
 
     public enum InnerMsgEnum {
-        sign_in, reconnect, connect_init,pub
+        sign_in, reconnect, connect_init, pub, friend_online
+    }
+
+    //发布消息
+    public static final class PubMsg {
+
+        private String topic;
+
+        private byte[] msg;
+
+        public PubMsg(String topic, byte[] msg) {
+            this.topic = topic;
+            this.msg = msg;
+        }
+
+        public byte[] msg() {
+            return msg;
+        }
+
+        public String topic() {
+            return topic;
+        }
     }
 }
