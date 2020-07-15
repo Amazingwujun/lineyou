@@ -16,6 +16,8 @@ import io.netty.handler.codec.mqtt.MqttMessageBuilders;
 import io.netty.handler.codec.mqtt.MqttPublishMessage;
 import io.netty.handler.codec.mqtt.MqttQoS;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
@@ -31,6 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -49,6 +53,7 @@ public class MainController extends AbstractDragController implements Listener {
      * 默认头像
      */
     private Image defaultAvatar = new Image(getClass().getResourceAsStream("/img/avatar.jpg"));
+    private Map<String, ObservableList<AnchorPane>> msgViewMap = new HashMap<>(20);
 
     public TextField searchWord;
 
@@ -86,7 +91,18 @@ public class MainController extends AbstractDragController implements Listener {
             }
         }));
 
-        friendsView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> to = newValue.getId());
+        friendsView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (Objects.equals(to, newValue.getId())) {
+                return;
+            }
+            to = newValue.getId();
+            ObservableList<AnchorPane> anchorPanes = msgViewMap.get(to);
+            if (anchorPanes == null) {
+                anchorPanes = FXCollections.observableArrayList();
+            }
+            msgView.setItems(anchorPanes);
+            msgView.refresh();
+        });
     }
 
 
@@ -110,12 +126,12 @@ public class MainController extends AbstractDragController implements Listener {
                     ProtoMsg.ChatMessage chatMessage = ProtoMsg.ChatMessage.parseFrom(bytes);
 
                     String strMsg = chatMessage.getMsg();
-                    AnchorPane self = PaneUtils.other(
+                    AnchorPane other = PaneUtils.other(
                             new Image(getClass().getResourceAsStream("/img/avatar.jpg")),
                             strMsg,
                             msgView.widthProperty()
                     );
-                    msgView.getItems().add(self);
+                    msgViewMap.get(chatMessage.getFrom()).add(other);
                 } catch (InvalidProtocolBufferException e) {
                     e.printStackTrace();
                 }
@@ -173,27 +189,29 @@ public class MainController extends AbstractDragController implements Listener {
             log.error("必须选择一个对象");
         } else {
             String msgText = sendMsg.getText();
+            if (!StringUtils.hasText(msgText)) {
+                return;
+            }
+
             ProtoMsg.ChatMessage chatMessage = ProtoMsg.ChatMessage.newBuilder()
                     .setMsg(msgText)
                     .setFrom(SignInController.user.getUsername())
                     .setTo(to)
                     .setTimestamp(System.currentTimeMillis())
                     .build();
-
             MqttPublishMessage msg = MqttMessageBuilders.publish()
                     .messageId(netClient.genMsgId())
-                    .qos(MqttQoS.AT_MOST_ONCE)
+                    .qos(MqttQoS.AT_LEAST_ONCE)
                     .retained(false)
                     .payload(Unpooled.wrappedBuffer(chatMessage.toByteArray()))
                     .topicName("chat/msg/" + to)
                     .build();
-
             netClient.send(msg);
 
             Platform.runLater(() -> {
                 sendMsg.clear();
                 AnchorPane self = PaneUtils.self(new Image(getClass().getResourceAsStream("/img/avatar.jpg")), msgText, msgView.widthProperty());
-                msgView.getItems().add(self);
+                msgViewMap.get(to).add(self);
             });
         }
     }
@@ -223,6 +241,9 @@ public class MainController extends AbstractDragController implements Listener {
 
     private void whenFriendOnline(String mobile, String nickname) {
         AnchorPane friend = PaneUtils.friend(defaultAvatar, mobile, nickname);
+
+        //初始化聊天 chatList
+        msgViewMap.computeIfAbsent(mobile, k -> FXCollections.observableArrayList());
         friendsView.getItems().add(friend);
     }
 }

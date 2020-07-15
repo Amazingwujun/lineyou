@@ -145,7 +145,7 @@ public class SignInController extends AbstractDragController implements Listener
                     .password(user.getPassword().getBytes())
                     .username(user.getUsername())
                     .willFlag(true)
-                    .willQoS(MqttQoS.AT_MOST_ONCE)
+                    .willQoS(MqttQoS.AT_LEAST_ONCE)
                     .willRetain(false)
                     .willMessage(userStateMessage.toByteArray())
                     .willTopic(Topic.USER_STATE_CHANGE)
