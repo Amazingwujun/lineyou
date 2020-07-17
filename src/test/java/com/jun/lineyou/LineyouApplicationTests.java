@@ -1,14 +1,11 @@
 package com.jun.lineyou;
 
 
-import com.alibaba.fastjson.JSON;
-import com.jun.lineyou.entity.User;
+import java.util.Timer;
 
 class LineyouApplicationTests {
 
     public static void main(String[] args) {
-        User user = new User();
-        user.setPassword("nani");
-        System.out.println(JSON.toJSONString(user));
+        System.out.println((1+4+1)%5);
     }
 }

@@ -1,8 +1,8 @@
 package com.jun.lineyou.entity;
 
-import javafx.scene.Node;
+import javafx.scene.Parent;
 
-public final class ControllerAndView<C, V extends Node> {
+public final class ControllerAndView<C, V extends Parent> {
 
     private final C controller;
 

@@ -59,7 +59,7 @@ public class InnerMsg {
     }
 
     public enum InnerMsgEnum {
-        sign_in, reconnect, connect_init, pub, friend_online
+        sign_in, reconnect, connect_init, pub, fetch_friend_req, fetch_friend_resp,search_friend_init,make_friend_success
     }
 
     //发布消息

@@ -4,7 +4,7 @@ import com.jun.lineyou.annotation.ViewController;
 import com.jun.lineyou.constant.ViewFxml;
 import com.jun.lineyou.entity.ControllerAndView;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.scene.Parent;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +34,7 @@ public class FxmlHandler {
      * @param <V>   视图
      * @return {@link ControllerAndView}
      */
-    public <C, V extends Node> ControllerAndView<C, V> loadControllerAndView(Class<C> clazz) {
+    public <C, V extends Parent> ControllerAndView<C, V> loadControllerAndView(Class<C> clazz) {
         ViewController viewController = clazz.getAnnotation(ViewController.class);
         ViewFxml fxml = viewController.fxml();
 

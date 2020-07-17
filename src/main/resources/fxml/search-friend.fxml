@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="349.0" prefWidth="242.0" xmlns="http://javafx.com/javafx/8.0.241"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jun.lineyou.ui.controller.FriendController" stylesheets="@../css/root.css">
+    <ImageView fitHeight="81.0" fitWidth="81" layoutX="82.0" layoutY="54.0" pickOnBounds="true"
+               preserveRatio="true">
+        <clip>
+            <Rectangle arcHeight="13" arcWidth="13" width="81" height="81"/>
+        </clip>
+        <Image url="@../img/avatar.jpg"/>
+    </ImageView>
+    <Separator layoutX="41.0" layoutY="160.0" prefHeight="3.0" prefWidth="161.0"/>
+    <Label fx:id="mobile" layoutX="72.0" layoutY="186.0" text="17620078988">
+        <font>
+            <Font size="20.0"/>
+        </font>
+    </Label>
+    <FontAwesomeIconView glyphName="MOBILE" layoutX="41.0" layoutY="210.0" size="30"/>
+    <FontAwesomeIconView glyphName="USER" layoutX="38.0" layoutY="245.0" size="23"/>
+    <Label fx:id="nickname" layoutX="72.0" layoutY="224.0" text="心悦君兮">
+        <font>
+            <Font size="20.0"/>
+        </font>
+    </Label>
+    <JFXButton onAction="#makeFriend" layoutX="38.0" layoutY="279.0" prefHeight="31.0" prefWidth="161.0" text="加为好友"/>
+</AnchorPane>

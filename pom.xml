@@ -16,6 +16,7 @@
         <fxlauncher.version>1.0.20</fxlauncher.version>
         <fontawesomefx.version>8.9</fontawesomefx.version>
         <protobuf.version>3.12.2</protobuf.version>
+        <fastjson.version>1.2.70</fastjson.version>
 
         <!--    fxlauncher properties    -->
         <!-- Installer Filename without suffix -->
@@ -37,7 +38,7 @@
         <app.version>0.0.1</app.version>
 
         <!-- Base URL where you will host the application artifacts -->
-        <app.url>http://localhost:8080/</app.url>
+        <app.url>http://119.45.158.51:18848/</app.url>
 
         <!-- Optional scp target for application artifacts hosted at the above url -->
         <app.deploy.target>w48839@fxldemo.tornado.no:fxldemo</app.deploy.target>
@@ -118,7 +119,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.70</version>
+            <version>${fastjson.version}</version>
         </dependency>
 
         <dependency>
