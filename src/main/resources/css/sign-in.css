@@ -27,3 +27,21 @@
 .jfx-password-field {
     -fx-alignment: center;
 }
+
+.sign-up {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: #2c9160;
+    -fx-opacity: 0.7;
+}
+
+.sign-up:hover {
+    -fx-opacity: 1;
+}
+
+#notice {
+    -fx-text-fill: #b71f2e;
+    -fx-background-radius: 5px;
+    -fx-font-family: "Microsoft JhengHei";
+    -fx-font-weight: bold;
+}

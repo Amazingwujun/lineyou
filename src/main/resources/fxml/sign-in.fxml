@@ -5,55 +5,56 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="400" prefWidth="278" stylesheets="/css/sign-in.css" xmlns="http://javafx.com/javafx/8.0.241"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jun.lineyou.ui.controller.SignInController">
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400" prefWidth="278" stylesheets="@../css/sign-in.css" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jun.lineyou.ui.controller.SignInController">
     <children>
-        <GridPane layoutX="39.0" layoutY="147.0" prefHeight="400.0" prefWidth="278.0" AnchorPane.bottomAnchor="0.0"
-                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <GridPane layoutX="39.0" layoutY="147.0" prefHeight="400.0" prefWidth="278.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="134.0" minHeight="0.0" prefHeight="26.0" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="345.0" minHeight="10.0" prefHeight="281.0" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="144.0" minHeight="10.0" prefHeight="91.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="134.0" minHeight="0.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="345.0" minHeight="10.0" prefHeight="272.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="144.0" minHeight="10.0" prefHeight="101.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
                 <AnchorPane fx:id="leftPane" prefHeight="200.0" prefWidth="200.0">
                     <children>
-                        <Label alignment="CENTER" layoutX="10.0" layoutY="5.0" prefHeight="18" prefWidth="55"/>
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="5.0" prefHeight="18" prefWidth="55" />
                     </children>
                 </AnchorPane>
                 <AnchorPane fx:id="rightPane" prefHeight="27.0" prefWidth="139.0" GridPane.columnIndex="1">
                     <children>
-                        <FontAwesomeIconView fx:id="close" glyphName="CLOSE" layoutX="103.0" layoutY="18.0" size="18"
-                                             AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                        <FontAwesomeIconView fx:id="close" glyphName="CLOSE" layoutX="103.0" layoutY="18.0" size="18" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                     </children>
                 </AnchorPane>
                 <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
                     <children>
-                        <VBox layoutX="89.0" layoutY="61.0" prefHeight="339.0" prefWidth="278.0"
-                              style="-fx-alignment: top-center;" AnchorPane.bottomAnchor="0.0"
-                              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox layoutX="89.0" layoutY="61.0" prefHeight="339.0" prefWidth="278.0" style="-fx-alignment: top-center;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <children>
-                                <ImageView fx:id="logo" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
-                                           preserveRatio="true">
+                                <ImageView fx:id="logo" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                     <VBox.margin>
-                                        <Insets bottom="10" top="10"/>
+                                        <Insets bottom="10" top="10" />
                                     </VBox.margin>
                                 </ImageView>
                                 <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="278.0">
                                     <children>
                                         <AnchorPane prefHeight="200.0" prefWidth="278.0">
                                             <children>
-                                                <JFXTextField fx:id="username" layoutX="117.0" layoutY="10.0"/>
+                                                <JFXTextField fx:id="username" layoutX="117.0" layoutY="10.0" />
                                                 <Label layoutX="39.0" layoutY="14.0" text="用户：">
                                                     <padding>
-                                                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                                                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                     </padding>
                                                 </Label>
                                             </children>
@@ -66,10 +67,10 @@
                                             <children>
                                                 <Label layoutX="39.0" layoutY="14.0" text="密码：">
                                                     <padding>
-                                                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                                                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                                     </padding>
                                                 </Label>
-                                                <JFXPasswordField fx:id="password" layoutX="117.0" layoutY="10.0"/>
+                                                <JFXPasswordField fx:id="password" layoutX="117.0" layoutY="10.0" />
                                             </children>
                                         </AnchorPane>
                                     </children>
@@ -80,8 +81,13 @@
                 </AnchorPane>
                 <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                     <children>
-                        <JFXButton fx:id="signIn" layoutX="40.0" onAction="#signIn" prefHeight="36.0" prefWidth="185.0"
-                                   text="登入"/>
+                        <JFXButton fx:id="signIn" layoutX="40.0" onAction="#signIn" prefHeight="36.0" prefWidth="185.0" text="登入" />
+                        <Button layoutX="238.0" layoutY="65.0" mnemonicParsing="false" onAction="#signUp" styleClass="sign-up" text="注册" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+                  <HBox alignment="CENTER" layoutY="51.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Label fx:id="notice" />
+                     </children>
+                  </HBox>
                     </children>
                 </AnchorPane>
             </children>

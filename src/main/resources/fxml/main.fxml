@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -35,14 +36,18 @@
                 <AnchorPane fx:id="leftPane" prefHeight="658.0" prefWidth="60.0" style="-fx-background-color: #282d31;"
                             GridPane.hgrow="NEVER" GridPane.rowSpan="3" GridPane.vgrow="ALWAYS">
                     <children>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="15.0" layoutY="15.0" pickOnBounds="true"
-                                   preserveRatio="true">
-                            <image>
-                                <Image url="@../img/avatar.jpg"/>
-                            </image>
-                        </ImageView>
-                        <FontAwesomeIconView glyphName="COMMENT_ALT" layoutX="20.0" layoutY="94.0" size="20"/>
-                        <FontAwesomeIconView glyphName="USER" layoutX="20.0" layoutY="150.0" size="20"/>
+                        <VBox alignment="CENTER" layoutX="15.0" layoutY="15.0" spacing="20.0"
+                              AnchorPane.topAnchor="20.0">
+                            <children>
+                                <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../img/avatar.jpg"/>
+                                    </image>
+                                </ImageView>
+                                <FontAwesomeIconView glyphName="COMMENT_ALT" size="20"/>
+                                <FontAwesomeIconView glyphName="USER" size="20"/>
+                            </children>
+                        </VBox>
                         <FontAwesomeIconView glyphName="BARS" layoutX="20.0" layoutY="664.0" size="20"
                                              AnchorPane.bottomAnchor="15"/>
                     </children>
@@ -95,9 +100,22 @@
                 <AnchorPane fx:id="midPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #eeebe8"
                             GridPane.columnIndex="1">
                     <children>
-                        <TextField fx:id="searchWord" layoutX="14.0" layoutY="20.0" promptText="搜索"/>
-                        <FontAwesomeIconView onMouseClicked="#searchFriend" glyphName="SEARCH" layoutX="184.0"
-                                             layoutY="36.0" size="15"/>
+                        <HBox alignment="CENTER" layoutX="14.0" layoutY="20.0" spacing="10.0"
+                              AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="5.0">
+                            <children>
+                                <TextField fx:id="searchWord" prefHeight="25.0" prefWidth="161.0" promptText="搜索"
+                                           style="-fx-background-color: #DCD9D8;"/>
+                                <HBox>
+                                    <children>
+                                        <FontAwesomeIconView glyphName="PLUS" onMouseClicked="#searchFriend" size="18">
+                                            <HBox.margin>
+                                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                                            </HBox.margin>
+                                        </FontAwesomeIconView>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </HBox>
                     </children>
                 </AnchorPane>
             </children>

@@ -1,5 +1,6 @@
 package com.jun.lineyou.entity;
 
+import com.alibaba.fastjson.JSONObject;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -13,6 +14,8 @@ public class User {
     private SimpleStringProperty username = new SimpleStringProperty();
 
     private SimpleStringProperty password = new SimpleStringProperty();
+
+    private String token;
 
     public String getUsername() {
         return username.get();
@@ -36,5 +39,20 @@ public class User {
 
     public SimpleStringProperty passwordProperty() {
         return password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String toJsonString() {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("mobile", username.getValue());
+        jsonObject.put("password", password.getValue());
+        return jsonObject.toString();
     }
 }

@@ -1,0 +1,26 @@
+.jfx-button {
+    -jfx-button-type: FLAT;
+    -fx-background-color: #669966;
+    -fx-text-fill: white;
+    -fx-font-size: 17;
+    -fx-cursor: hand;
+}
+
+.warn {
+    -fx-background-color: #b71f2e;
+    -fx-font-family: "Microsoft JhengHei UI";
+    -fx-text-fill: white;
+}
+
+.success {
+    -fx-background-color: #77b055;
+    -fx-font-family: "Microsoft JhengHei UI";
+    -fx-text-fill: black;
+}
+
+#notice {
+    -fx-text-fill: #b71f2e;
+    -fx-background-radius: 5px;
+    -fx-font-family: "Microsoft JhengHei UI";
+    -fx-font-weight: bold;
+}

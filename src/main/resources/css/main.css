@@ -27,15 +27,47 @@
     -fx-background-color: #f5f5f5;
 }
 
+#msgView > .virtual-flow > .scroll-bar {
+    -fx-background-color: #f5f5f5;
+}
+
+#msgView > .virtual-flow > .scroll-bar:vertical .thumb {
+    -fx-background-radius: 5px;
+    -fx-background-color: #cacaca;
+}
+
+#msgView > .virtual-flow > .scroll-bar:vertical .thumb:hover {
+    -fx-background-radius: 5px;
+    -fx-background-color: #aeaeae;
+}
+
+#msgView > .virtual-flow > .scroll-bar > .decrement-button,
+#msgView > .virtual-flow > .scroll-bar > .increment-button {
+    -fx-padding: 2px;
+    -fx-opacity: 0;
+}
+
+#midPane > HBox > HBox:hover {
+    -fx-background-color: #c4c1c0;
+}
+
+#midPane > HBox > HBox {
+    -fx-background-color: #d7d4d3;
+    -fx-background-radius: 5px;
+}
+
+
+#chatTitle {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Microsoft JhengHei";
+}
 
 #friendsView .list-cell {
     -fx-background-color: #eeebe8;
 }
 
-#friendsView .list-cell:selected {
-    -fx-background-color: #a8a6a5;
-}
-
+#friendsView .list-cell:selected,
 #friendsView .list-cell:hover:selected {
     -fx-background-color: #a8a6a5;
 }
@@ -48,7 +80,7 @@
     -fx-padding: 0.5;
 }
 
-.text-area ,
+.text-area,
 .text-area .content {
     -fx-background-color: white;
 }

@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class PaneUtils {
 
-    public static AnchorPane friend(Image image, String mobile, String nickname) {
+    public static AnchorPane friend(Image image, String mobile, String nickname, Boolean isOnline) {
         AnchorPane pane = new AnchorPane();
         pane.setId(mobile);
         ImageView avatar = new ImageView();
@@ -45,9 +45,13 @@ public class PaneUtils {
         AnchorPane.setLeftAnchor(online, (double) 48);
         AnchorPane.setTopAnchor(online, (double) 25);
         online.setRadius(5);
-        online.setFill(Paint.valueOf("green"));
-        pane.getChildren().addAll(avatar, nicknameLabel, online);
+        if (isOnline == null) {
+            online.setFill(Paint.valueOf("red"));
+        } else {
+            online.setFill(isOnline ? Paint.valueOf("green") : Paint.valueOf("gray"));
+        }
 
+        pane.getChildren().addAll(avatar, nicknameLabel, online);
         return pane;
     }
 

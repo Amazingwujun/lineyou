@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="313.0" prefWidth="244.0" stylesheets="@../css/root.css" xmlns="http://javafx.com/javafx/8.0.241" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jun.lineyou.ui.controller.SignUpController">
+    <children>
+        <VBox layoutX="29.0" layoutY="34.0" spacing="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="30.0">
+            <children>
+                <HBox spacing="30.0">
+                    <children>
+                        <FontAwesomeIconView glyphName="MOBILE" size="30" />
+                        <JFXTextField fx:id="mobile" promptText="手机号" HBox.hgrow="ALWAYS">
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </JFXTextField>
+                    </children>
+                </HBox>
+                <HBox spacing="23.0">
+                    <children>
+                        <FontAwesomeIconView glyphName="USER" size="25" />
+                        <JFXTextField fx:id="nickname" promptText="昵称" HBox.hgrow="ALWAYS" />
+                    </children>
+                </HBox>
+                <HBox spacing="18.0">
+                    <children>
+                        <FontAwesomeIconView glyphName="KEY" size="25" />
+                        <JFXPasswordField fx:id="password" promptText="密码" HBox.hgrow="ALWAYS" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+        <JFXButton layoutX="35.0" layoutY="244.0" onAction="#signUp" prefHeight="31.0" prefWidth="175.0" text="注册" />
+        <Separator layoutX="23.0" layoutY="210.0" prefWidth="200.0" />
+      <HBox alignment="CENTER" layoutX="108.0" layoutY="284.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+              <Label fx:id="notice" style="-fx-background-radius: 5;" textFill="#9a222299" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+    </children>
+</AnchorPane>

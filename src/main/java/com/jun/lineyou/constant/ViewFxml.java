@@ -13,7 +13,11 @@ public enum ViewFxml {
     /**
      * 主视图
      */
-    MAIN("/fxml/main.fxml");
+    MAIN("/fxml/main.fxml"),
+
+    SIGN_UP("/fxml/sign-up.fxml"),
+
+    SEARCH_FRIEND("/fxml/search-friend.fxml");
 
     private final String name;
 

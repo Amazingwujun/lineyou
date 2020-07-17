@@ -32,7 +32,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 /**
  * 远程调用工具类
@@ -98,6 +97,8 @@ public class HttpUtils {
             params.forEach((k, v) -> nvps.add(new BasicNameValuePair(k, v)));
 
             httpPost.setEntity(new UrlEncodedFormEntity(nvps, StandardCharsets.UTF_8));
+        } else if (param == null) {
+
         } else {
             throw new IllegalArgumentException("不支持的参数类型:" + param);
         }
@@ -111,9 +112,9 @@ public class HttpUtils {
      * @param uri     请求地址
      * @param headers 请求头
      * @param param   请求参数
-     * @return
+     * @param callback 回调函数
      */
-    public static Future<HttpResponse> asyncGet(String uri, Map<String, String> headers, Map<String, String> param) {
+    public static void asyncGet(String uri, Map<String, String> headers, Map<String, String> param, FutureCallback<HttpResponse> callback) {
         Assert.hasText(uri, "请求uri不能为空");
 
         //请求体拼接
@@ -143,7 +144,7 @@ public class HttpUtils {
             headers.forEach(httpGet::setHeader);
         }
 
-        return httpClient.execute(httpGet, null);
+        httpClient.execute(httpGet, callback);
     }
 
     /**

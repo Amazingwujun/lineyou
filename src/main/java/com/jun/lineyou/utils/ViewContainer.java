@@ -17,7 +17,9 @@ public class ViewContainer {
     /** 主视图 */
     public static Stage MAIN;
 
-    public static Stage DEMO;
+    public static Stage SEARCH_FRIEND;
+
+    public static Stage SIGN_UP;
 
     //@formatter:on
 }
