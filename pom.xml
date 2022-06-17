@@ -16,7 +16,7 @@
         <fxlauncher.version>1.0.20</fxlauncher.version>
         <fontawesomefx.version>8.9</fontawesomefx.version>
         <protobuf.version>3.12.2</protobuf.version>
-        <fastjson.version>1.2.70</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
 
         <!--    fxlauncher properties    -->
         <!-- Installer Filename without suffix -->
